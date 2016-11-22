@@ -1,4 +1,15 @@
 yotta_modules/*
 yotta_targets/*
-build/*
+BUILD/*
 .yotta.json
+mbed-os/*
+mbed-os-spirit1/*
+mbed-os-spirit1.lib
+nanostack-border-router/*
+sal-nanostack-driver-k64f-eth/*
+sal-stack-nanostack-private/*
+sal-stack-nanostack-private.lib
+sal-stack-nanostack-slip/*
+mbed-os
+mbed-os-spirit1
+sal-stack-nanostack-private
