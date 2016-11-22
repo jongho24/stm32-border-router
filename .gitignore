@@ -11,5 +11,5 @@ sal-stack-nanostack-private/*
 sal-stack-nanostack-private.lib
 sal-stack-nanostack-slip/*
 mbed-os
-mbed-os-spirit1
+stm-spirit1-rf-driver
 sal-stack-nanostack-private
