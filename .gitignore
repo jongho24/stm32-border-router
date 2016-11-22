@@ -13,3 +13,5 @@ sal-stack-nanostack-slip/*
 mbed-os
 stm-spirit1-rf-driver
 sal-stack-nanostack-private
+atmel-rf-driver/*
+mcr20a-rf-driver.git/*
