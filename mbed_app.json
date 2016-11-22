@@ -5,8 +5,8 @@
              "value": 50000
         },
         "radio-type":{
-            "help": "options are ATMEL, MCR20",
-            "value": "ATMEL"
+            "help": "options are ATMEL, MCR20, SPIRIT1",
+            "value": "SPIRIT1"
         },
         "debug-trace": "false",
         "trace-baud-rate": "115200",
