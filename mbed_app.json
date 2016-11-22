@@ -4,6 +4,10 @@
              "help": "The amount of static RAM to reserve for nsdynmemlib heap",
              "value": 50000
         },
+        "radio-type":{
+            "help": "options are ATMEL, MCR20",
+            "value": "ATMEL"
+        },
         "debug-trace": "false",
         "trace-baud-rate": "115200",
         "backhaul-driver": "ETH",
@@ -66,7 +70,7 @@
             "mbed-mesh-api.6lowpan-nd-channel": 0,
             "mbed-mesh-api.6lowpan-nd-channel-page": 2,
             "mbed-mesh-api.6lowpan-nd-channel-mask": "(1<<0)",
-            "target.features_add": ["IPV6", "COMMON_PAL"],
+            "target.features_add": ["NANOSTACK", "LOWPAN_BORDER_ROUTER", "COMMON_PAL"],
             "mbed-trace.enable": 1,
             "nanostack.configuration": "lowpan_border_router"
         }
