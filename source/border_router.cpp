@@ -225,5 +225,8 @@ static void app_heap_error_handler(heap_fail_t event)
             break;
     }
 
+    tr_info("Resetting board ...");
+    NVIC_SystemReset();
+
     while (1);
 }
