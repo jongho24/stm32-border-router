@@ -51,11 +51,11 @@
 		"rpl-pcs": 1,
 		"rpl-ocp": 1,
 		"multicast-addr": "ff05::7",
-    	"LED1": "LED_GREEN",
-   	    "SERIAL_TX": "PTE0",
-    	"SERIAL_RX": "PTE1",
-    	"SERIAL_CTS": "PTE2",
-    	"SERIAL_RTS": "PTE3"
+    	"LED1": "LED1",
+   	    "SERIAL_TX": "SERIAL_TX",
+    	"SERIAL_RX": "SERIAL_RX",
+    	"SERIAL_CTS": "PB_13",
+    	"SERIAL_RTS": "PB_12"
     },
     "target_overrides": {
         "*": {
@@ -72,7 +72,8 @@
             "mbed-mesh-api.6lowpan-nd-channel-mask": "(1<<0)",
             "target.features_add": ["NANOSTACK", "LOWPAN_BORDER_ROUTER", "COMMON_PAL"],
             "mbed-trace.enable": 1,
-            "nanostack.configuration": "lowpan_border_router"
+            "nanostack.configuration": "lowpan_border_router",
+	    "target.features_remove": ["LWIP"]
         }
     }
 }

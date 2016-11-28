@@ -15,3 +15,5 @@ stm-spirit1-rf-driver
 sal-stack-nanostack-private
 atmel-rf-driver/*
 mcr20a-rf-driver.git/*
+sal-nanostack-driver-stm32-eth
+sal-nanostack-driver-stm32-eth/*

@@ -22,7 +22,11 @@
 #endif
 #include "nsdynmemLIB.h"
 #include "nanostack-border-router/borderrouter_tasklet.h"
+#if TARGET_NUCLEO_F429ZI
+#include "sal-nanostack-driver-stm32-eth/stm32_eth_nanostack_port.h"
+#else
 #include "sal-nanostack-driver-k64f-eth/k64f_eth_nanostack_port.h"
+#endif
 #include "sal-stack-nanostack-slip/Slip.h"
 
 #if YOTTA_CFG_K64F_BORDER_ROUTER_DEBUG_TRACES==1
