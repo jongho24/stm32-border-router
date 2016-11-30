@@ -75,5 +75,6 @@
             "nanostack.configuration": "lowpan_border_router",
 	    "target.features_remove": ["LWIP"]
         }
-    }
+    },
+    "macros": ["PB5_ETH_PATCH"]
 }
