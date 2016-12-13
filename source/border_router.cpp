@@ -95,6 +95,10 @@ void backhaul_driver_init(void (*backhaul_driver_status_cb)(uint8_t, int8_t))
 {
     const char *driver;
 
+#if TARGET_NUCLEO_F429ZI
+#undef ETH
+#endif
+
 #ifndef MBED_CONF_RTOS_PRESENT
     driver = STR(YOTTA_CFG_K64F_BORDER_ROUTER_BACKHAUL_DRIVER);
 #else
@@ -192,7 +196,12 @@ void app_start(int, char **)
 #else
     led_ticker.attach_us(toggle_led1, 500000);
 #endif
+
+#if TARGET_NUCLEO_F429ZI
+    tr_info("Starting NUCLEO_F429ZI border router...");
+#else
     tr_info("Starting K64F border router...");
+#endif
     border_router_start();
 }
 

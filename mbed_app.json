@@ -8,7 +8,7 @@
             "help": "options are ATMEL, MCR20, SPIRIT1",
             "value": "SPIRIT1"
         },
-        "debug-trace": "false",
+        "debug-trace": "true",
         "trace-baud-rate": "115200",
         "backhaul-driver": "ETH",
         "backhaul-mac-src": "BOARD",
