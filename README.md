@@ -4,12 +4,12 @@
  * [NUCLEO-F429ZI](http://www.st.com/content/st_com/en/products/evaluation-tools/product-evaluation-tools/mcu-eval-tools/stm32-mcu-eval-tools/stm32-mcu-nucleo/nucleo-f429zi.html) + [X-NUCLEO-IDS01A4](http://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-connect-hw/x-nucleo-ids01a4.html)
 
 **Note**, in order to run this border router application on the `NUCLEO_F429ZI` development board you need to perform the following HW modifications on it:
- * **Open** solder bridge `SB121`
- * **Close** solder bridge `SB122`
+* **Open** solder bridge `SB121`
+* **Close** solder bridge `SB122`
  
 Furthermore, the RF expansion board `X-NUCLEO-IDS01A4` requires the following HW modifications:
- * **Un**mount resistor `R4`
- * **Mount** resistor `R7`
+* **Un**mount resistor `R4`
+* **Mount** resistor `R7`
 
 ## Introduction
 
@@ -19,7 +19,7 @@ This document describes how to configure, compile, and run this 6LoWPAN border r
 
 Border router is a network gateway between a wireless 6LoWPAN mesh network and a backhaul network. It controls and relays traffic between the two networks. In a typical setup, a 6LoWPAN border router is connected to another router in the backhaul network (over Ethernet or a serial line) which in turn forwards traffic to/from the internet or a private company LAN, for instance.
 
-![](images/frdm_k64f_br_role.png)
+![](images/stm32_nucleo_br_role.png)
 
 ## Software components
 
@@ -28,16 +28,14 @@ The STM32 Nucleo border router application consists of 4 software components as 
 ![](images/frdm_k64f_br_components.png)
 
 * [Nanostack Border Router](https://github.com/ARMmbed/nanostack-border-router) is the core IPv6 gateway logic and provides the mesh network functionality.
-* [Atmel RF driver](https://github.com/ARMmbed/atmel-rf-driver) is the driver for the Atmel AT86RF2xxx wireless 6LoWPAN shields.
-* [Ethernet driver](https://github.com/ARMmbed/sal-nanostack-driver-k64f-eth) is the Ethernet driver for the STM32 Nucleo development board.
+* [Spirit1 RF driver](https://github.com/ARMmbed/stm-spirit1-rf-driver) is the driver for the STM32 Spirit1 wireless 6LoWPAN expansion boards.
+* [Ethernet driver](https://github.com/ARMmbed/sal-nanostack-driver-stm32-eth) is the Ethernet driver for the STM32 Nucleo development board.
 * [SLIP driver](https://github.com/ARMmbed/sal-stack-nanostack-slip) is a generic Serial Line Internet Protocol version 6 (SLIPv6) driver for mbedOS boards.
 
 ## Required hardware
 
-* Two STM32 Nucleo development boards, one for the border router application and another one for [the 6LoWPAN mbed client application](https://github.com/ARMmbed/mbed-os-example-client).
-* Two mbed 6LoWPAN shields (AT86RF212B/[AT86RF233](http://uk.rs-online.com/web/p/radio-frequency-development-kits/9054107/)) for wireless 6LoWPAN mesh connectivity.
- * Alternatively you can use [NXP MCR20A](http://www.nxp.com/products/software-and-tools/hardware-development-tools/freedom-development-boards/freedom-development-board-for-mcr20a-wireless-transceiver:FRDM-CR20A) shields.
- * See [Switching the RF shield](#switching-the-rf-shield)
+* Two STM32 Nucleo development boards (currently only NUCLEO-F429ZI boards are supported), one for the border router application and another one for [the 6LoWPAN mbed client application](https://github.com/ARMmbed/mbed-os-example-client).
+* Two mbed 6LoWPAN shields [X-NUCLEO-IDS01A4](http://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-connect-hw/x-nucleo-ids01a4.html) for wireless 6LoWPAN mesh connectivity.
 * Two micro-USB cables to connect the development boards to a PC for debugging and power.
 * An Ethernet cable to connect the development board to a backhaul network.
 
