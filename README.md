@@ -1,10 +1,21 @@
-# FRDM-K64F border router
+# STM32 Nucleo Border Router
 
-This document describes how to configure, compile, and run a FRDM-K64F 6LoWPAN border router application on a [FRDM-K64F development board](https://developer.mbed.org/platforms/FRDM-K64F/). 
+## Currently supported boards
+ * [NUCLEO-F429ZI](http://www.st.com/content/st_com/en/products/evaluation-tools/product-evaluation-tools/mcu-eval-tools/stm32-mcu-eval-tools/stm32-mcu-nucleo/nucleo-f429zi.html) + [X-NUCLEO-IDS01A4](http://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-connect-hw/x-nucleo-ids01a4.html)
 
-<span class="notes">**Note:** This Border Router does not support Thread. For non-RTOS (yotta build), please follow onstructions in [Building with yotta](Building_with_yotta.md).</span>
+**Note**, in order to run this border router application on the `NUCLEO_F429ZI` development board you need to perform the following HW modifications on it:
+ * **Open** solder bridge `SB121`
+ * **Close** solder bridge `SB122`
+ 
+Furthermore, the RF expansion board `X-NUCLEO-IDS01A4` requires the following HW modifications:
+ * **Un**mount resistor `R4`
+ * **Mount** resistor `R7`
 
 ## Introduction
+
+This document describes how to configure, compile, and run this 6LoWPAN border router application on a STM32 Nucleo development board, especially the [NUCLEO-F429ZI](https://developer.mbed.org/platforms/ST-Nucleo-F429ZI/), together with the [X-NUCLEO-IDS01A4](https://github.com/ARMmbed/stm-spirit1-rf-driver) Sub-1 GHz RF expansion board. 
+
+<span class="notes">**Note:** This Border Router does not support Thread. For non-RTOS (yotta build), please follow instructions in [Building with yotta](Building_with_yotta.md).</span>
 
 Border router is a network gateway between a wireless 6LoWPAN mesh network and a backhaul network. It controls and relays traffic between the two networks. In a typical setup, a 6LoWPAN border router is connected to another router in the backhaul network (over Ethernet or a serial line) which in turn forwards traffic to/from the internet or a private company LAN, for instance.
 
@@ -12,18 +23,18 @@ Border router is a network gateway between a wireless 6LoWPAN mesh network and a
 
 ## Software components
 
-The FRDM-K64F border router application consists of 4 software components as shown in the image below:
+The STM32 Nucleo border router application consists of 4 software components as shown in the image below:
 
 ![](images/frdm_k64f_br_components.png)
 
 * [Nanostack Border Router](https://github.com/ARMmbed/nanostack-border-router) is the core IPv6 gateway logic and provides the mesh network functionality.
 * [Atmel RF driver](https://github.com/ARMmbed/atmel-rf-driver) is the driver for the Atmel AT86RF2xxx wireless 6LoWPAN shields.
-* [Ethernet driver](https://github.com/ARMmbed/sal-nanostack-driver-k64f-eth) is the Ethernet driver for the FRDM-K64F development board.
+* [Ethernet driver](https://github.com/ARMmbed/sal-nanostack-driver-k64f-eth) is the Ethernet driver for the STM32 Nucleo development board.
 * [SLIP driver](https://github.com/ARMmbed/sal-stack-nanostack-slip) is a generic Serial Line Internet Protocol version 6 (SLIPv6) driver for mbedOS boards.
 
 ## Required hardware
 
-* Two FRDM-K64F development boards, one for the border router application and another one for [the 6LoWPAN mbed client application](https://github.com/ARMmbed/mbed-os-example-client).
+* Two STM32 Nucleo development boards, one for the border router application and another one for [the 6LoWPAN mbed client application](https://github.com/ARMmbed/mbed-os-example-client).
 * Two mbed 6LoWPAN shields (AT86RF212B/[AT86RF233](http://uk.rs-online.com/web/p/radio-frequency-development-kits/9054107/)) for wireless 6LoWPAN mesh connectivity.
  * Alternatively you can use [NXP MCR20A](http://www.nxp.com/products/software-and-tools/hardware-development-tools/freedom-development-boards/freedom-development-board-for-mcr20a-wireless-transceiver:FRDM-CR20A) shields.
  * See [Switching the RF shield](#switching-the-rf-shield)
@@ -50,7 +61,7 @@ The FRDM-K64F border router application consists of 4 software components as sho
 
 ## Configuration
 
-To configure the FRDM-K64F border router you need to make changes in the application configuration file `mbed_app.json` in the root directory of the source tree. For the complete list of configuration options, refer to the [Nanostack Border Router](https://github.com/ARMmbed/nanostack-border-router) documentation.
+To configure the STM32 Nucleo border router you need to make changes in the application configuration file `mbed_app.json` in the root directory of the source tree. For the complete list of configuration options, refer to the [Nanostack Border Router](https://github.com/ARMmbed/nanostack-border-router) documentation.
 
 ```json
 {
@@ -71,9 +82,9 @@ To configure the FRDM-K64F border router you need to make changes in the applica
 
 #### Backhaul connectivity
 
-The FRDM-K64F border router application can be connected to a backhaul network. This enables you to connect the devices in a 6LoWPAN mesh network to the internet or a private LAN. Currently, the application supports SLIP (IPv6 encapsulation over a serial line) and Ethernet backhaul connectivity. 
+The STM32 Nucleo border router application can be connected to a backhaul network. This enables you to connect the devices in a 6LoWPAN mesh network to the internet or a private LAN. Currently, the application supports SLIP (IPv6 encapsulation over a serial line) and Ethernet backhaul connectivity. 
 
-You can select your preferred option through the `mbed_app.json` file (field *backhaul-driver* in the *config* section). Value `SLIP` includes the SLIP driver, while the value `ETH` compiles the FRDM-K64F border router application with Ethernet backhaul support. You can define the MAC address on the backhaul interface manually (field *backhaul-mac-src* value `CONFIG`). Alternatively, you can use the MAC address provided by the development board (field *backhaul-mac-src* value `BOARD`). By default, the backhaul driver is set to be `ETH` and the MAC address source is `BOARD`. 
+You can select your preferred option through the `mbed_app.json` file (field *backhaul-driver* in the *config* section). Value `SLIP` includes the SLIP driver, while the value `ETH` compiles the STM32 Nucleo border router application with Ethernet backhaul support. You can define the MAC address on the backhaul interface manually (field *backhaul-mac-src* value `CONFIG`). Alternatively, you can use the MAC address provided by the development board (field *backhaul-mac-src* value `BOARD`). By default, the backhaul driver is set to be `ETH` and the MAC address source is `BOARD`. 
 
 You can also set the bakchaul bootstrap mode (field *backhaul-bootstrap-mode*). By default, the bootstrap mode is set to be `NET_IPV6_BOOTSTRAP_AUTONOMOUS`. With autonomous mode, the border router learns the prefix information automatically from an IPv6 gateway in the ethernet/SLIP segment. Optionally, you can set the bootsrap mode to be `NET_IPV6_BOOTSTRAP_STATIC` which enables you to set up  a manual configuration of backhaul-prefix and default-route.
 
@@ -88,7 +99,7 @@ When using the autonomous mode, you can set the `prefix-from-backhaul` option in
 You need to use the UART1 serial line of the K64F board with the SLIP driver. See the *pins* section in the project's yotta configuration. To use a different UART line, replace the *SERIAL_TX* and *SERIAL_RX* values with correct TX/RX pin names. 
 If you wish to use hardware flow control, set the configuration field `slip_hw_flow_control``to `true`. By default, it is set to `false`. Before using hardware flow control, make sure that the other end of your SLIP interface can handle flow control.
 
-For the pin names of your desired UART line, refer to the [FRDM-K64F documentation](https://developer.mbed.org/platforms/FRDM-K64F/).
+For the pin names of your desired UART line, refer to the [STM32 Nucleo documentation](https://developer.mbed.org/platforms/STM32 Nucleo/).
 
 Example yotta configuration for the SLIP driver:
 
@@ -137,7 +148,7 @@ The binary will be generated into `.build/K64F/GCC_ARM/thread-testapp-private.bi
 ## Running the border router application
 
 1. Find the  binary file `k64f-border-router.bin` in the folder `.build/K64F/GCC_ARM/`.
-2. Copy the binary to the USB mass storage root of the FRDM-K64F development board. It is automatically flashed to the target MCU. When the flashing is complete, the board restarts itself. Press the **Reset** button of the development board if it does not restart automatically.
+2. Copy the binary to the USB mass storage root of the STM32 Nucleo development board. It is automatically flashed to the target MCU. When the flashing is complete, the board restarts itself. Press the **Reset** button of the development board if it does not restart automatically.
 3. The program begins execution.
 4. Open the [serial connection](#serial-connection-settings), for example PuTTY.
 
