@@ -13,9 +13,9 @@ Furthermore, the RF expansion board `X-NUCLEO-IDS01A4` requires the following HW
 
 ## Introduction
 
-This document describes how to configure, compile, and run this 6LoWPAN border router application on a STM32 Nucleo development board, especially the [NUCLEO-F429ZI](https://developer.mbed.org/platforms/ST-Nucleo-F429ZI/), together with the [X-NUCLEO-IDS01A4](https://github.com/ARMmbed/stm-spirit1-rf-driver) Sub-1 GHz RF expansion board. 
+This document describes how to configure, compile, and run this 6LoWPAN border router application on a STM32 Nucleo development board, especially the [NUCLEO-F429ZI](https://developer.mbed.org/platforms/ST-Nucleo-F429ZI/), together with the [X-NUCLEO-IDS01A4](https://github.com/ARMmbed/stm-spirit1-rf-driver) Sub-1 GHz RF expansion board (*a.k.a.* Spirit1). 
 
-<span class="notes">**Note:** This Border Router does not support Thread. For non-RTOS (yotta build), please follow instructions in [Building with yotta](Building_with_yotta.md).</span>
+<span class="notes">**Note:** This Border Router does not support Thread.
 
 Border router is a network gateway between a wireless 6LoWPAN mesh network and a backhaul network. It controls and relays traffic between the two networks. In a typical setup, a 6LoWPAN border router is connected to another router in the backhaul network (over Ethernet or a serial line) which in turn forwards traffic to/from the internet or a private company LAN, for instance.
 
@@ -28,18 +28,18 @@ The STM32 Nucleo border router application consists of 4 software components as 
 ![](images/frdm_k64f_br_components.png)
 
 * [Nanostack Border Router](https://github.com/ARMmbed/nanostack-border-router) is the core IPv6 gateway logic and provides the mesh network functionality.
-* [Spirit1 RF driver](https://github.com/ARMmbed/stm-spirit1-rf-driver) is the driver for the STM32 Spirit1 wireless 6LoWPAN expansion boards.
+* [Spirit1 RF driver](https://github.com/ARMmbed/stm-spirit1-rf-driver) is the driver for the STM Spirit1 wireless 6LoWPAN expansion boards.
 * [Ethernet driver](https://github.com/ARMmbed/sal-nanostack-driver-stm32-eth) is the Ethernet driver for the STM32 Nucleo development board.
 * [SLIP driver](https://github.com/ARMmbed/sal-stack-nanostack-slip) is a generic Serial Line Internet Protocol version 6 (SLIPv6) driver for mbedOS boards.
 
 ## Required hardware
 
 * Two STM32 Nucleo development boards (currently only NUCLEO-F429ZI boards are supported), one for the border router application and another one for [the 6LoWPAN mbed client application](https://github.com/ARMmbed/mbed-os-example-client).
-* Two mbed 6LoWPAN shields [X-NUCLEO-IDS01A4](http://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-connect-hw/x-nucleo-ids01a4.html) for wireless 6LoWPAN mesh connectivity.
+* Two STM Spirit1 Sub-1 GHz RF expansion boards [X-NUCLEO-IDS01A4](http://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-connect-hw/x-nucleo-ids01a4.html) for wireless 6LoWPAN mesh connectivity.
 * Two micro-USB cables to connect the development boards to a PC for debugging and power.
 * An Ethernet cable to connect the development board to a backhaul network.
 
-![](images/frdm_k64f_board_plus_shield.png)
+![](images/stm32_nucleo_board_plus_shield.png)
 
 ## Required software
 
@@ -61,8 +61,7 @@ The STM32 Nucleo border router application consists of 4 software components as 
 
 To configure the STM32 Nucleo border router you need to make changes in the application configuration file `mbed_app.json` in the root directory of the source tree. For the complete list of configuration options, refer to the [Nanostack Border Router](https://github.com/ARMmbed/nanostack-border-router) documentation.
 
-```json
-{
+```
     "config": {
         "heap-size": {
              "help": "The amount of static RAM to reserve for nsdynmemlib heap",
@@ -73,9 +72,7 @@ To configure the STM32 Nucleo border router you need to make changes in the appl
         "backhaul-driver": "ETH",
         "backhaul-mac-src": "BOARD",
         "backhaul-mac": "{0x02, 0x00, 0x00, 0x00, 0x00, 0x01}"
-        }
     }
-}
 ```
 
 #### Backhaul connectivity
@@ -97,62 +94,93 @@ When using the autonomous mode, you can set the `prefix-from-backhaul` option in
 You need to use the UART1 serial line of the K64F board with the SLIP driver. See the *pins* section in the project's yotta configuration. To use a different UART line, replace the *SERIAL_TX* and *SERIAL_RX* values with correct TX/RX pin names. 
 If you wish to use hardware flow control, set the configuration field `slip_hw_flow_control``to `true`. By default, it is set to `false`. Before using hardware flow control, make sure that the other end of your SLIP interface can handle flow control.
 
-For the pin names of your desired UART line, refer to the [STM32 Nucleo documentation](https://developer.mbed.org/platforms/STM32 Nucleo/).
+For the pin names of your desired UART line, refer to the [STM32 Nucleo documentation](https://developer.mbed.org/platforms/ST-Nucleo-F429ZI/).
 
-Example yotta configuration for the SLIP driver:
+Example `mbed_app.json` configuration for the SLIP driver:
 
-```json
-  "config" : {
-   	    "SERIAL_TX": "PTE0",
-    	"SERIAL_RX": "PTE1",
-    	"SERIAL_CTS": "PTE2",
-    	"SERIAL_RTS": "PTE3"
-  },
+```
+    "config": {
+  	    "SERIAL_TX": "SERIAL_TX",
+    	"SERIAL_RX": "SERIAL_RX",
+    	"SERIAL_CTS": "PD_11",
+    	"SERIAL_RTS": "PD_12"
+    }
 ```
 
 ### Switching the RF shield
 
-By default the application uses Atmel AT86RF233/212B RF driver. You can alternatively use FRDM-MCR20A shield also. Used RF driver is set in the `mbed_app.json` file.
+By default the application uses the Spirit1 RF driver. You can alternatively use the Atmel AT86RF233/212B RF or the FRDM-MCR20A shield also. The used RF driver is set in the `mbed_app.json` file.
+
+To use the STM Spirit1 radio, use following:
+```
+    "config": {
+        "radio-type":{
+            "help": "options are SPIRIT1, ATMEL, MCR20",
+            "value": "SPIRIT1"
+        }
+    }
+```
 
 To use the Atmel radio, use following:
 ```
+    "config": {
         "radio-type":{
-            "help": "options are ATMEL, MCR20",
+            "help": "options are SPIRIT1, ATMEL, MCR20",
             "value": "ATMEL"
-        },
+        }
+    }
 ```
 
 To use the NXP radio, use following:
 ```
+    "config": {
         "radio-type":{
-            "help": "options are ATMEL, MCR20",
+            "help": "options are SPIRIT1, ATMEL, MCR20",
             "value": "MCR20"
-        },
+        }
+    }
 ```
 
 After changing the radio, you need to recompile the application.
 
+In case you have choosen the STM Spirit1 Sub-1 GHz RF expansion board [X-NUCLEO-IDS01A4](https://github.com/ARMmbed/stm-spirit1-rf-driver), you need also to config its MAC address in the `mbed_app.json` file, e.g.:
+```
+    "target_overrides": {
+        "*": {
+            "spirit1.mac-address-0": "0xf0",
+    	    "spirit1.mac-address-1": "0xf1",
+    	    "spirit1.mac-address-2": "0xf2",
+    	    "spirit1.mac-address-3": "0xf3",
+    	    "spirit1.mac-address-4": "0xf4",
+    	    "spirit1.mac-address-5": "0xf5",
+    	    "spirit1.mac-address-6": "0xf6",
+    	    "spirit1.mac-address-7": "0xf7"
+        },
+    }
+```
+
+Note, that this MAC address must be unique within the 6LoWPAN mesh network.
+
 ## Build instructions
 
 1. Install [mbed-cli](https://github.com/ARMmbed/mbed-cli).
-2. Clone the repository: `git clone git@github.com:ARMmbed/k64f-border-router.git`
+2. Clone the repository: `git clone https://github.com/ARMmbed/stm32-border-router.git`.
 3. Modify the `mbed_app.json` file to reflect to your network setup.
-4. Deploy required libraries: `mbed deploy`
-5. Generate mbed application root: `mbed new .`
-6. Build: `mbed compile -m K64F -t GCC_ARM`
+4. Deploy required libraries: `mbed deploy`.
+5. Build: `mbed compile -m NUCLEO_F429ZI -t GCC_ARM`.
 
-The binary will be generated into `.build/K64F/GCC_ARM/thread-testapp-private.bin`
+The binary will be generated into `BUILD/NUCLEO_F429ZI/GCC_ARM/stm32-border-router.bin`.
 
 ## Running the border router application
 
-1. Find the  binary file `k64f-border-router.bin` in the folder `.build/K64F/GCC_ARM/`.
+1. Find the  binary file `stm32-border-router.bin` in the folder `BUILD/NUCLEO_F429ZI/GCC_ARM/`.
 2. Copy the binary to the USB mass storage root of the STM32 Nucleo development board. It is automatically flashed to the target MCU. When the flashing is complete, the board restarts itself. Press the **Reset** button of the development board if it does not restart automatically.
 3. The program begins execution.
 4. Open the [serial connection](#serial-connection-settings), for example PuTTY.
 
 ## Serial connection settings
 
-Serial connection settings for the Thread test application are as follows:
+Serial connection settings for the border router application are as follows:
 
 	* Baud-rate = 115200
 	* Data bits = 8
@@ -164,30 +192,28 @@ If there is no input from the serial terminal, press the **Reset** button of the
 In the PuTTY main screen, save the session and click **Open**. This opens a console window showing debug messages from the application. If the console screen is blank, you may need to press the **Reset** button of the board to see the debug information. The prints for the border router look something like this in the console:
 
 ```
-[INFO][app ]: Starting K64F border router...
-[INFO][app ]: Using SLIP backhaul driver...
-[INFO][app ]: Starting K64F border router...
-[INFO][app ]: Using SLIP backhaul driver...
-[INFO][addr]: Tentative Address added to IF 1: fe80::441:e2ff:fe12:faad
-[INFO][addr]: DAD passed on IF 1: fe80::441:e2ff:fe12:faad
-[INFO][addr]: Tentative Address added to IF 1: fd00:db8:ff1:0:441:e2ff:fe12:faad
-[INFO][addr]: DAD passed on IF 1: fd00:db8:ff1:0:441:e2ff:fe12:faad
-[INFO][brro]: Backhaul bootstrap ready, IPv6 = fd00:db8:ff1:0:441:e2ff:fe12:faad
+[INFO][app ]: Starting NUCLEO_F429ZI border router...
+[INFO][app ]: Using ETH backhaul driver...
+[ERR ][brro]: Backhaul interface down failed
+[INFO][Eth ]: Ethernet cable connected.
+[INFO][addr]: Tentative Address added to IF 2: fe80::280:e1ff:fe3e:42
+[INFO][addr]: DAD passed on IF 2: fe80::280:e1ff:fe3e:42
+[INFO][addr]: Tentative Address added to IF 2: 2001:470:1f13:280:280:e1ff:fe3e:42
+[INFO][addr]: DAD passed on IF 2: 2001:470:1f13:280:280:e1ff:fe3e:42
+[INFO][brro]: Backhaul bootstrap ready, IPv6 = 2001:470:1f13:280:280:e1ff:fe3e:42
 [INFO][brro]: Backhaul interface addresses:
-[INFO][brro]:    [0] fe80::441:e2ff:fe12:faad
-[INFO][brro]:    [1] fd00:db8:ff1:0:441:e2ff:fe12:faad
-[INFO][addr]: Address added to IF 0: fe80::ff:fe00:face
+[INFO][brro]:    [0] fe80::280:e1ff:fe3e:42
+[INFO][brro]:    [1] 2001:470:1f13:280:280:e1ff:fe3e:42
+[INFO][addr]: Address added to IF 1: fe80::ff:fe00:face
 [INFO][br  ]: BR nwk base ready for start
-[INFO][br  ]: Refresh xts
+[INFO][br  ]: Refresh Contexts
 [INFO][br  ]: Refresh Prefixs
-[INFO][addr]: Address added to IF 0: fd00:db8:ff1::ff:fe00:face
-[INFO][addr]: Address added to IF 0: fe80::fec2:3d00:3:3503
-[INFO][brro]: RF bootstrap ready, IPv6 = fd00:db8:ff1::ff:fe00:face
+[INFO][addr]: Address added to IF 1: 2001:470:1f13:280:0:ff:fe00:face
+[INFO][addr]: Address added to IF 1: fe80::f2f1:f2f3:f4f5:f6f7
+[INFO][brro]: RF bootstrap ready, IPv6 = 2001:470:1f13:280:0:ff:fe00:face
 [INFO][brro]: RF interface addresses:
 [INFO][brro]:    [0] fe80::ff:fe00:face
-[INFO][brro]:    [1] fe80::fec2:3d00:3:3503
-[INFO][brro]:    [2] fd00:db8:ff1::ff:fe00:face
+[INFO][brro]:    [1] fe80::f2f1:f2f3:f4f5:f6f7
+[INFO][brro]:    [2] 2001:470:1f13:280:0:ff:fe00:face
 [INFO][brro]: 6LoWPAN Border Router Bootstrap Complete.
-
 ```
-

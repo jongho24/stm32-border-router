@@ -5,7 +5,7 @@
              "value": 50000
         },
         "radio-type":{
-            "help": "options are ATMEL, MCR20, SPIRIT1",
+            "help": "options are SPIRIT1, ATMEL, MCR20",
             "value": "SPIRIT1"
         },
         "debug-trace": "false",
@@ -54,8 +54,8 @@
     	"LED1": "LED1",
    	"SERIAL_TX": "SERIAL_TX",
     	"SERIAL_RX": "SERIAL_RX",
-    	"SERIAL_CTS": "PB_13",
-    	"SERIAL_RTS": "PB_12"
+    	"SERIAL_CTS": "PD_11",
+    	"SERIAL_RTS": "PD_12"
     },
     "target_overrides": {
         "*": {
