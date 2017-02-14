@@ -7,7 +7,7 @@
 * **Open** solder bridge `SB121`
 * **Close** solder bridge `SB122`
  
-Furthermore, the RF expansion board `X-NUCLEO-IDS01A4` requires the following HW modifications:
+Furthermore, the RF expansion board `X-NUCLEO-IDS01A4` requires these HW modifications:
 * **Un**mount resistor `R4`
 * **Mount** resistor `R7`
 
@@ -61,7 +61,7 @@ The STM32 Nucleo border router application consists of 4 software components as 
 
 To configure the STM32 Nucleo border router you need to make changes in the application configuration file `mbed_app.json` in the root directory of the source tree. For the complete list of configuration options, refer to the [Nanostack Border Router](https://github.com/ARMmbed/nanostack-border-router) documentation.
 
-```
+```json
     "config": {
         "heap-size": {
              "help": "The amount of static RAM to reserve for nsdynmemlib heap",
@@ -98,7 +98,7 @@ For the pin names of your desired UART line, refer to the [STM32 Nucleo document
 
 Example `mbed_app.json` configuration for the SLIP driver:
 
-```
+```json
     "config": {
   	    "SERIAL_TX": "SERIAL_TX",
     	"SERIAL_RX": "SERIAL_RX",
@@ -112,7 +112,7 @@ Example `mbed_app.json` configuration for the SLIP driver:
 By default the application uses the Spirit1 RF driver. You can alternatively use the Atmel AT86RF233/212B RF or the FRDM-MCR20A shield also. The used RF driver is set in the `mbed_app.json` file.
 
 To use the STM Spirit1 radio, use following:
-```
+```json
     "config": {
         "radio-type":{
             "help": "options are SPIRIT1, ATMEL, MCR20",
@@ -122,7 +122,7 @@ To use the STM Spirit1 radio, use following:
 ```
 
 To use the Atmel radio, use following:
-```
+```json
     "config": {
         "radio-type":{
             "help": "options are SPIRIT1, ATMEL, MCR20",
@@ -132,7 +132,7 @@ To use the Atmel radio, use following:
 ```
 
 To use the NXP radio, use following:
-```
+```json
     "config": {
         "radio-type":{
             "help": "options are SPIRIT1, ATMEL, MCR20",
@@ -143,8 +143,8 @@ To use the NXP radio, use following:
 
 After changing the radio, you need to recompile the application.
 
-In case you have choosen the STM Spirit1 Sub-1 GHz RF expansion board [X-NUCLEO-IDS01A4](https://github.com/ARMmbed/stm-spirit1-rf-driver), you need also to config its MAC address in the `mbed_app.json` file, e.g.:
-```
+In case you have choosen the STM Spirit1 Sub-1 GHz RF expansion board [X-NUCLEO-IDS01A4](https://github.com/ARMmbed/stm-spirit1-rf-driver), you need also to configure its MAC address in the `mbed_app.json` file, e.g.:
+```json
     "target_overrides": {
         "*": {
             "spirit1.mac-address-0": "0xf0",
@@ -163,11 +163,13 @@ Note, that this MAC address must be unique within the 6LoWPAN mesh network.
 
 ## Build instructions
 
-1. Install [mbed-cli](https://github.com/ARMmbed/mbed-cli).
-2. Clone the repository: `git clone https://github.com/ARMmbed/stm32-border-router.git`.
-3. Modify the `mbed_app.json` file to reflect to your network setup.
-4. Deploy required libraries: `mbed deploy`.
-5. Build: `mbed compile -m NUCLEO_F429ZI -t GCC_ARM`.
+1. Install [mbed-cli](https://github.com/ARMmbed/mbed-cli)
+2. Clone the repository: `git clone https://github.com/ARMmbed/stm32-border-router.git`
+3. Change directory to `stm32-border-router`
+4. Modify the `mbed_app.json` file to reflect to your network setup
+5. Deploy required libraries: `mbed deploy`
+6. Generate mbed application root: `mbed new .`
+7. Build: `mbed compile -m NUCLEO_F429ZI -t GCC_ARM`
 
 The binary will be generated into `BUILD/NUCLEO_F429ZI/GCC_ARM/stm32-border-router.bin`.
 
