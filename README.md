@@ -141,8 +141,6 @@ To use the NXP radio, use following:
     }
 ```
 
-After changing the radio, you need to recompile the application.
-
 In case you have choosen the STM Spirit1 Sub-1 GHz RF expansion board [X-NUCLEO-IDS01A4](https://github.com/ARMmbed/stm-spirit1-rf-driver), you need also to configure its MAC address in the `mbed_app.json` file, e.g.:
 ```json
     "target_overrides": {
@@ -153,6 +151,8 @@ In case you have choosen the STM Spirit1 Sub-1 GHz RF expansion board [X-NUCLEO-
 ```
 
 Note, that this MAC address must be unique within the 6LoWPAN mesh network.
+
+After changing the radio, you need to recompile the application.
 
 ## Build instructions
 
