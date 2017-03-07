@@ -69,5 +69,5 @@
 	    "target.features_remove": ["LWIP"]
         }
     },
-    "macros": ["PB5_ETH_PATCH"]
+    "macros": ["SPIRIT1_SPI_MOSI=PB_5"]
 }
